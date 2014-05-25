@@ -1,4 +1,5 @@
 
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -13,24 +14,34 @@ public class Lemmatizer {
     
     private String []args;
     
+    private StopWord stopObject;
+    
     public Lemmatizer(String []args) {
         this.args = args;
         this.init();
     }
     
     private void init() {
-        try {
-            this.validateInputParams();
-        } catch (InputValidation ex) {
-            System.exit(1);
-        }
+        this.getInputParams();
+        this.removeStopWords();
     }
     
-    private void validateInputParams() throws InputValidation {
+    private void getInputParams() {
         int inputSize = this.args.length;
         
         if(inputSize != 2) {
-            throw new InputValidation(InputValidation.PARAM_NUMBERS);
+//            throw new InputValidation(InputValidation.PARAM_NUMBERS);
+        }
+        this.inputFileName = args[0];
+        this.outputFileName = args[1];
+    }
+    
+    private void removeStopWords() {
+        this.stopObject = new StopWord();
+        try {
+            this.stopObject.removeWords(this.inputFileName);
+        } catch (IOException ex) {
+            Logger.getLogger(Lemmatizer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

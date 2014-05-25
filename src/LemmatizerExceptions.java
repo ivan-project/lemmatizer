@@ -58,3 +58,19 @@ class InputValidation extends LemmatizerExceptions {
         super(code, InputValidation.msgList.get(code));
     }
 }
+
+class StopWordException extends LemmatizerExceptions {
+    protected Integer excType = ExceptionCodes.InputValidation;
+    protected static HashMap<Integer, String> msgList;
+    
+    static Integer READ_INPUT_FILE = 1;
+    
+    static {
+        msgList = new HashMap<Integer, String>();
+        msgList.put(StopWordException.READ_INPUT_FILE, "Can read input file with stop words");
+    }
+
+    public StopWordException(Integer code) {
+        super(code, StopWordException.msgList.get(code));
+    }
+}
