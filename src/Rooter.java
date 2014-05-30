@@ -14,6 +14,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 
 /**
  *
@@ -90,8 +91,11 @@ public class Rooter {
     private void getRoot(String line) {
         String newLine = "";
         String useCol;
+        String[] splitedLine = line.split(" ");
+        Arrays.sort(splitedLine);
+        
 
-        for(String sLine : line.split(" ")) {
+        for(String sLine : splitedLine) {
             useCol = String.valueOf(sLine.toCharArray()[0]);
             whereQuery.clear();
             whereQuery.put("word", sLine);
