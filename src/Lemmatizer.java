@@ -15,43 +15,48 @@ public class Lemmatizer {
     private String []args;
     
     private StopWord stopObject;
+    private Rooter rooterObject;
     
-    public Lemmatizer(String []args) {
+    public Lemmatizer(String []args) throws MyException {
         this.args = args;
         this.init();
     }
     
-    private void init() {
+    private void init() throws MyException {
         this.getInputParams();
         this.removeStopWords();
+        this.getRootOfWord();
     }
     
-    private void getInputParams() {
+    private void getInputParams() throws MyException {
         int inputSize = this.args.length;
         
         if(inputSize != 2) {
-//            throw new InputValidation(InputValidation.PARAM_NUMBERS);
+            throw new MyException("Nieprawidłowa liczba parametrów");
         }
         this.inputFileName = args[0];
         this.outputFileName = args[1];
     }
     
-    private void removeStopWords() {
+    private void removeStopWords() throws MyException {
         this.stopObject = new StopWord();
-        try {
-            this.stopObject.removeWords(this.inputFileName);
-        } catch (IOException ex) {
-            Logger.getLogger(Lemmatizer.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        this.stopObject.removeWords(this.inputFileName);
+    }
+    
+    private void getRootOfWord() throws MyException {
+        this.rooterObject = new Rooter();
+        this.rooterObject.startProcess(this.stopObject.getTmpFIleName(), this.outputFileName);
     }
     
     
     
     public static void main(String []args) {
-//        StopWord stop = new StopWord();
-        
-        Lemmatizer lemObject = new Lemmatizer(args);
-
+        try {
+            Lemmatizer lemObject = new Lemmatizer(args);
+        } catch (MyException ex) {
+            System.err.println("Something goes wrong check tmp/exceptions.log");
+            System.exit(0);
+        }
     }
     
 }

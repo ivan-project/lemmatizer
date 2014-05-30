@@ -1,4 +1,3 @@
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
@@ -7,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  *
@@ -19,45 +19,75 @@ public class StopWord {
     private String stopFileName = "stop_words_2";
     private String stopPath = "files/";
     private String tmpFileName = "haha";
+    private PrintWriter pw; 
     
     
-    public StopWord() {
+    public StopWord() throws MyException {
         this.init();
     }
     
-    private void init() {
+    private void init() throws MyException {
         this.stopList = new ArrayList<>();
+        this.readStopWordsFromFile();
+    }
+    
+    private void readStopWordsFromFile() throws MyException {
+        BufferedReader br;
         try {
-            this.readStopWordsFromFile();
-        } catch (IOException ex) {
-            System.err.println(ex);
-            System.exit(2);
+            br = new BufferedReader(new FileReader(this.stopPath+this.stopFileName));
+        } catch (FileNotFoundException ex) {
+            throw new MyException("Error while opening stop words from file");
         }
-    }
-    
-    private void readStopWordsFromFile() throws FileNotFoundException, IOException {
-        BufferedReader br = new BufferedReader(new FileReader(this.stopPath+this.stopFileName));
+        
         String line;
-        while ((line = br.readLine()) != null) {
-           this.stopList.add(line);
+        try {
+            while ((line = br.readLine()) != null) {
+                this.stopList.add(line);
+            }
+        } catch (IOException ex) {
+            throw new MyException("Error while reading stop words from file while processing stop words");
+        } finally {
+            try {
+                br.close();
+            } catch (IOException ex) {
+                throw new MyException("Error while closing stop words from file while processing stop words");
+            }
         }
-        br.close();
-    }
-    
-    public ArrayList<String> getStopList() {
-        return stopList;
     }
 
-    public void removeWords(String inputFileName) throws FileNotFoundException, IOException {
-        BufferedReader br = new BufferedReader(new FileReader(inputFileName));
-        String line;
-        while ((line = br.readLine()) != null) {
-            line = this.removeStopWords(line);
-            line = this.removeChars(line);
-            line = this.replaceSpaces(line);
-            this.saveToTmp(line);
+    public void removeWords(String inputFileName) throws MyException {
+        this.createTmpFileName(inputFileName);
+        BufferedReader br;
+        try {
+            br = new BufferedReader(new FileReader(inputFileName));
+        } catch (FileNotFoundException ex) {
+            throw new MyException("Error while opening input file while processing stop words");
         }
-        br.close();
+        try {
+            this.pw = new PrintWriter(new BufferedWriter(new FileWriter(this.tmpFileName, true)));
+        } catch (IOException ex) {
+            throw new MyException("Error while opening temporary file while processing stop words");
+        }
+        
+        String line;
+        try {
+            while ((line = br.readLine()) != null) {
+                line = this.removeStopWords(line);
+                line = this.removeChars(line);
+                line = this.removeNumbers(line);
+                line = this.replaceSpaces(line);
+                
+                this.saveToTmp(line);
+            }
+        } catch (IOException ex) {
+            throw new MyException("Error while reading from input file");
+        }
+        try {
+            this.pw.close();
+            br.close();
+        } catch (IOException ex) {
+            throw new MyException("Error while closing input or temporary file");
+        }
     }
     
     private String removeStopWords(String line) {
@@ -79,13 +109,20 @@ public class StopWord {
     }
 
     private void saveToTmp(String line) throws IOException {
-        PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter("tmp/"+this.tmpFileName, true)));
-        pw.println(line);
-        pw.close();
+        this.pw.println(line);
     }
     
     public String getTmpFIleName() {
         return this.tmpFileName;
+    }
+
+    private String removeNumbers(String line) {
+        return line.replaceAll("\\d", " ");
+    }
+
+    private void createTmpFileName(String inputFileName) {
+        Date date = new Date();
+        this.tmpFileName = "tmp/"+inputFileName+"_"+date.getTime();
     }
     
     
