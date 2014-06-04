@@ -16,9 +16,9 @@ public class StopWord {
     
     private ArrayList<String> stopList;
     
-    private String stopFileName = "stop_words_2";
+    private String stopFileName = "stop_words";
     private String stopPath = "files/";
-    private String tmpFileName = "haha";
+    private String tmpFileName = "";
     private PrintWriter pw; 
     
     
