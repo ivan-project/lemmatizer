@@ -3,7 +3,7 @@ Lematyzator
 
 Jak to działa
 ----------
-Program przyjmuje na wejście dwa parametry, pierwszy plik który chcemy zlematyzować, drugi plik wyjściowy do którego zostanie zapisany zlematyzowany tekst.
+Program przyjmuje na wejście dwa parametry. Pierwszy,  plik który chcemy zlematyzować oraz drugi, plik wyjściowy do którego zostanie zapisany zlematyzowany tekst.
 
 W razie problemów z działaniem programu wszystkie błędy zapisywane są do pliku exceptions.log znajdującego się w katalogu logs.
 
