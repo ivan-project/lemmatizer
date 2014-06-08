@@ -49,7 +49,7 @@ public class Lemmatizer {
         try {
             Lemmatizer lemObject = new Lemmatizer(args);
         } catch (MyException ex) {
-            System.err.println("Something goes wrong check tmp/exceptions.log");
+            System.err.println("Something goes wrong check logs/exceptions.log");
             System.exit(0);
         }
     }

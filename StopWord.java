@@ -5,6 +5,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -121,8 +123,9 @@ public class StopWord {
     }
 
     private void createTmpFileName(String inputFileName) {
+        Path path = Paths.get(inputFileName);
         Date date = new Date();
-        this.tmpFileName = "tmp/"+inputFileName+"_"+date.getTime();
+        this.tmpFileName = "tmp/"+path.getFileName().toString()+"_"+date.getTime();
     }
     
     

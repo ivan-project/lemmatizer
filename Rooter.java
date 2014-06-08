@@ -41,7 +41,7 @@ public class Rooter {
     
     private void init() throws MyException {
         try {
-            this.mongoClient = new MongoClient( "localhost" , 27000 );
+            this.mongoClient = new MongoClient( "localhost" , 27017 );
         } catch (UnknownHostException ex) {
             throw new MyException("Error while connecting to database");
         }
