@@ -1,4 +1,4 @@
-Lematyzator
+Lematyzator (zmienione - do aktualizacji)
 ==========
 
 Jak to działa
