@@ -96,14 +96,22 @@ public class Rooter {
         
 
         for(String sLine : splitedLine) {
+            if(sLine.isEmpty()) {
+                continue;
+            }
             useCol = String.valueOf(sLine.toCharArray()[0]);
             whereQuery.clear();
             whereQuery.put("word", sLine);
             this.findResult = this.mongoDB.getCollection(useCol).findOne(whereQuery);
-            newLine += this.findResult.get("core")+" ";
+            if(this.findResult != null) {
+                newLine += this.findResult.get("core")+" ";
+            }
         }
         newLine = newLine.trim();
-        this.pw.println(newLine);
+        if(!newLine.isEmpty()) {
+            this.pw.println(newLine);
+        }
+        
     }
 
     private void removeTmp() {
