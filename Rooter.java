@@ -97,6 +97,7 @@ public class Rooter {
 
         for(String sLine : splitedLine) {
             if(sLine.isEmpty()) {
+                this.pw.println("");
                 continue;
             }
             useCol = String.valueOf(sLine.toCharArray()[0]);
@@ -105,6 +106,8 @@ public class Rooter {
             this.findResult = this.mongoDB.getCollection(useCol).findOne(whereQuery);
             if(this.findResult != null) {
                 newLine += this.findResult.get("core")+" ";
+            } else {
+                newLine += sLine+" ";
             }
         }
         newLine = newLine.trim();
